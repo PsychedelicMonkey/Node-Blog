@@ -47,7 +47,7 @@ router.post('/register', async (req, res) => {
     if (errors.length > 0) {
       res.render('register', { errors, username, email });
     } else {
-      user = new User({ username, email });
+      user = new User({ username, email, googleId: '-1' });
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(password, salt);
       user.password = hash;
@@ -66,5 +66,18 @@ router.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/');
 });
+
+router.get(
+  '/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { failureRedirect: '/auth/login' }),
+  (req, res) => {
+    res.redirect('/');
+  }
+);
 
 module.exports = router;
