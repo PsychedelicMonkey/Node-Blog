@@ -1,0 +1,20 @@
+{
+  "editor.defaultFormatter": null,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+  },
+  "[ejs]": {
+    "editor.suggest.insertMode": "replace",
+    "editor.tabSize": 4,
+    "editor.formatOnSave": true
+  },
+  "liveSassCompile.settings.generateMap": false,
+  "liveSassCompile.settings.formats": [
+    {
+      "format": "compressed",
+      "extensionName": ".css",
+      "savePath": "/public/css"
+    }
+  ]
+}
