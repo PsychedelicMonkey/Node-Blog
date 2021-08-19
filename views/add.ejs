@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-md-6 m-auto">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="text-center mb-2">Create New Post</h1>
+        <%- include ('partials/messages') %>
+
+        <form action="/posts" method="post">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" name="title" id="title" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="body">Body</label>
+            <textarea name="body" class="form-control"></textarea>            
+          </div>
+
+          <input type="submit" value="Create Post" class="btn btn-primary btn-block">
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
