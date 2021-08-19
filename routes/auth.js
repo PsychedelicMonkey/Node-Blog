@@ -1,5 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
+
+const User = require('../models/User');
 
 router.get('/login', (req, res) => {
   res.render('login');
@@ -9,7 +12,7 @@ router.get('/register', (req, res) => {
   res.render('register');
 });
 
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   const { username, email, password, password2 } = req.body;
 
   let errors = [];
@@ -21,10 +24,32 @@ router.post('/register', (req, res) => {
     errors.push({ msg: 'Passwords must match' });
   }
 
-  if (errors.length > 0) {
-    res.render('register', { errors });
-  } else {
-    res.redirect('/auth/login');
+  try {
+    let user = await User.findOne({ username }).exec();
+    if (user) {
+      errors.push({ msg: 'Please use a different username' });
+    }
+
+    user = await User.findOne({ email }).exec();
+    if (user) {
+      errors.push({ msg: 'Please use a different email address' });
+    }
+
+    if (errors.length > 0) {
+      res.render('register', { errors, username, email });
+    } else {
+      user = new User({ username, email });
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(password, salt);
+      user.password = hash;
+      await user.save();
+
+      res.redirect('/auth/login');
+    }
+  } catch (err) {
+    console.log(err);
+    errors.push({ msg: 'Database error' });
+    res.render('register', { errors, username, email });
   }
 });
 
