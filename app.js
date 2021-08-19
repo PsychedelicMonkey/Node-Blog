@@ -13,6 +13,9 @@ dotenv.config();
 
 const app = express();
 
+// Passport config
+require('./config/passport')(passport);
+
 // Middleware
 app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');

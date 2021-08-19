@@ -1,15 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
+const { ensureGuest } = require('../middleware/auth');
 
 const User = require('../models/User');
 
-router.get('/login', (req, res) => {
+router.get('/login', ensureGuest, (req, res) => {
   res.render('login');
 });
 
-router.get('/register', (req, res) => {
+router.get('/register', ensureGuest, (req, res) => {
   res.render('register');
+});
+
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/auth/login',
+  })(req, res, next);
 });
 
 router.post('/register', async (req, res) => {
@@ -51,6 +60,11 @@ router.post('/register', async (req, res) => {
     errors.push({ msg: 'Database error' });
     res.render('register', { errors, username, email });
   }
+});
+
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/');
 });
 
 module.exports = router;
