@@ -43,6 +43,7 @@ mongoose
 
 // Routes
 app.use('/', require('./routes/index'));
+app.use('/auth', require('./routes/auth'));
 
 const PORT = process.env.PORT || 3000;
 
